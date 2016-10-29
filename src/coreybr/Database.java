@@ -32,7 +32,7 @@ public class Database {
 			while (rs.next()) {
 				Car car = new Car();
 				car.setAirbags(rs.getString("car_airbags"));
-				car.setCylinders(rs.getInt("car_engine_size"));
+				car.setCylinders(rs.getInt("car_cylinders"));
 				car.setDrivetrain(rs.getString("car_drivetrain"));
 				car.setEngineSize(rs.getFloat("car_engine_size"));
 				car.setHorsepower(rs.getInt("car_horsepower"));
