@@ -17,6 +17,7 @@ public class UserInterface implements Runnable {
 	private JLabel makeLabel, modelLabel, typeLabel, minPriceLabel, maxPriceLabel, mpgCityLabel, mpgHwyLabel,
 			airbagsLabel, drivetrainLabel, cylindersLabel, horsepowerLabel, manTransAvailLabel, originLabel;
 	private ArrayList<Car> cars;
+	final int COLUMN_COUNT = 13;
 
 	public UserInterface(ArrayList<Car> cars) {
 		this.cars = cars;
@@ -39,12 +40,13 @@ public class UserInterface implements Runnable {
 
 	// Define GUI content
 	private void createComponents(Container container) {
+		
 		// Setup container layout
 		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
 		
 		// Header
 		Container headerContainer = new Container();
-		GridLayout headerLayout = new GridLayout(1, cars.size());
+		GridLayout headerLayout = new GridLayout(1, COLUMN_COUNT);
 		headerContainer.setLayout(headerLayout);
 		
 		makeLabel = new JLabel("Make");
@@ -78,12 +80,13 @@ public class UserInterface implements Runnable {
 
 		// Setup bodyContainer layout
 		Container bodyContainer = new Container();
-		GridLayout bodyLayout = new GridLayout(cars.size(), 13);
+		GridLayout bodyLayout = new GridLayout(cars.size(), COLUMN_COUNT);
 		bodyContainer.setLayout(bodyLayout);
 		
 		// Put container into scrollable area
 		JScrollPane myJScrollPane = new JScrollPane(bodyContainer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		myJScrollPane.getVerticalScrollBar().setUnitIncrement(16); // Increase scroll speed
 
 		// Show cars
 		for (Car car : cars) {
