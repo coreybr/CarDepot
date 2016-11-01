@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 public class UserInterface implements Runnable {
@@ -29,6 +30,11 @@ public class UserInterface implements Runnable {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		createComponents(frame.getContentPane());
+
+		// Put container into scrollable area
+		JScrollPane myJScrollPane = new JScrollPane(frame.getContentPane(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		frame.setContentPane(myJScrollPane);
 
 		frame.pack();
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // maximized
