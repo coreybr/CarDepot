@@ -2,22 +2,17 @@ package coreybr;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import java.util.Vector;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 public class UserInterface implements Runnable {
 
 	private JFrame frame;
-	private JLabel makeLabel, modelLabel, typeLabel, minPriceLabel, maxPriceLabel, mpgCityLabel, mpgHwyLabel,
-			airbagsLabel, drivetrainLabel, cylindersLabel, horsepowerLabel, manTransAvailLabel, originLabel;
 	private ArrayList<Car> cars;
-	final int COLUMN_COUNT = 13;
 
 	public UserInterface(ArrayList<Car> cars) {
 		this.cars = cars;
@@ -41,87 +36,57 @@ public class UserInterface implements Runnable {
 	// Define GUI content
 	private void createComponents(Container container) {
 		
-		// Setup container layout
-		container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
 		
-		// Header
-		Container headerContainer = new Container();
-		GridLayout headerLayout = new GridLayout(1, COLUMN_COUNT);
-		headerContainer.setLayout(headerLayout);
-		
-		makeLabel = new JLabel("Make");
-		makeLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-		headerContainer.add(makeLabel);
-		modelLabel = new JLabel("Model");
-		headerContainer.add(modelLabel);
-		typeLabel = new JLabel("Type");
-		headerContainer.add(typeLabel);
-		minPriceLabel = new JLabel("Min price");
-		headerContainer.add(minPriceLabel);
-		maxPriceLabel = new JLabel("Max price");
-		headerContainer.add(maxPriceLabel);
-		mpgCityLabel = new JLabel("MPG City");
-		headerContainer.add(mpgCityLabel);
-		mpgHwyLabel = new JLabel("MPG Hwy");
-		headerContainer.add(mpgHwyLabel);
-		airbagsLabel = new JLabel("Airbags");
-		headerContainer.add(airbagsLabel);
-		drivetrainLabel = new JLabel("Drivetrain");
-		headerContainer.add(drivetrainLabel);
-		cylindersLabel = new JLabel("Cylinders");
-		headerContainer.add(cylindersLabel);
-		horsepowerLabel = new JLabel("Horsepower");
-		headerContainer.add(horsepowerLabel);
-		manTransAvailLabel = new JLabel("Man Trans Avail");
-		headerContainer.add(manTransAvailLabel);
-		originLabel = new JLabel("Origin");
-		headerContainer.add(originLabel);
-		container.add(headerContainer);
+		// Create table
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.addElement("Make");
+		columnNames.addElement("Model");
+		columnNames.addElement("Type");
+		columnNames.addElement("Min price");
+		columnNames.addElement("Max price");
+		columnNames.addElement("MPG City");
+		columnNames.addElement("MPG Hwy");
+		columnNames.addElement("Airbags");
+		columnNames.addElement("Drivetrain");
+		columnNames.addElement("Cylinders");
+		columnNames.addElement("Horsepower");
+		columnNames.addElement("Man Trans Avail");
+		columnNames.addElement("Origin");		
 
-		// Setup bodyContainer layout
-		Container bodyContainer = new Container();
-		GridLayout bodyLayout = new GridLayout(cars.size(), COLUMN_COUNT);
-		bodyContainer.setLayout(bodyLayout);
+		// Populate table rows
+		@SuppressWarnings("rawtypes")
+		Vector<Vector> rowData = new Vector<Vector>();
 		
-		// Put container into scrollable area
-		JScrollPane myJScrollPane = new JScrollPane(bodyContainer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		for (Car car : cars) {		
+			Vector<String> row = new Vector<String>();
+		    row.addElement(car.getManufacturer());
+		    row.addElement(car.getModel());
+		    row.addElement(car.getType());
+		    row.addElement("$" + Double.toString(car.getMinPrice()) + "0");
+		    row.addElement("$" + Double.toString(car.getMaxPrice()) + "0");
+		    row.addElement(Integer.toString(car.getMpgCity()));
+		    row.addElement(Integer.toString(car.getMpgHighway()));
+		    row.addElement(car.getAirbags());
+		    row.addElement(car.getDrivetrain());
+		    row.addElement(Integer.toString(car.getCylinders()));
+		    row.addElement(Integer.toString(car.getHorsepower()));
+		    if (car.isManTransAvailable()) {
+		    	row.addElement("Yes");
+			} else {
+				row.addElement("No");
+			}
+		    row.addElement(car.getOrigin());
+		    
+		    rowData.addElement(row);
+		}
+		
+		JTable table = new JTable(rowData, columnNames);
+		
+		// Put table into scrollable area
+		JScrollPane myJScrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		myJScrollPane.getVerticalScrollBar().setUnitIncrement(16); // Increase scroll speed
-
-		// Show cars
-		for (Car car : cars) {
-			makeLabel = new JLabel(car.getManufacturer());
-			makeLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-			bodyContainer.add(makeLabel);
-			modelLabel = new JLabel(car.getModel());
-			bodyContainer.add(modelLabel);
-			typeLabel = new JLabel(car.getType());
-			bodyContainer.add(typeLabel);
-			minPriceLabel = new JLabel("$" + Double.toString(car.getMinPrice()) + "0");
-			bodyContainer.add(minPriceLabel);
-			maxPriceLabel = new JLabel("$" + Double.toString(car.getMaxPrice()) + "0");
-			bodyContainer.add(maxPriceLabel);
-			mpgCityLabel = new JLabel(Integer.toString(car.getMpgCity()));
-			bodyContainer.add(mpgCityLabel);
-			mpgHwyLabel = new JLabel(Integer.toString(car.getMpgHighway()));
-			bodyContainer.add(mpgHwyLabel);
-			airbagsLabel = new JLabel(car.getAirbags());
-			bodyContainer.add(airbagsLabel);
-			drivetrainLabel = new JLabel(car.getDrivetrain());
-			bodyContainer.add(drivetrainLabel);
-			cylindersLabel = new JLabel(Integer.toString(car.getCylinders()));
-			bodyContainer.add(cylindersLabel);
-			horsepowerLabel = new JLabel(Integer.toString(car.getHorsepower()));
-			bodyContainer.add(horsepowerLabel);
-			if (car.isManTransAvailable()) {
-				manTransAvailLabel = new JLabel("Yes");
-			} else {
-				manTransAvailLabel = new JLabel("No");
-			}
-			bodyContainer.add(manTransAvailLabel);
-			originLabel = new JLabel(car.getOrigin());
-			bodyContainer.add(originLabel);
-		}
+		
 		container.add(myJScrollPane);
 	}
 
